@@ -243,6 +243,27 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 
+interface GetMemberInfo {
+  error: boolean,
+  data: [
+    {
+      id: number,
+      firstName: string,
+      lastName: string,
+      createdTime: string,
+      updatedTime: string
+    }
+  ],
+  message: string
+}
+
+interface MemberDetails {
+  id: number,
+  firstName: string,
+  lastName: string,
+  createdTime: string,
+  updatedTime: string
+}
 @Component
 export default class Member extends Vue {
   private loading = false;
@@ -280,7 +301,7 @@ export default class Member extends Vue {
     },
   ];
   private name = ''
-  private details = {}
+  private details= {} as MemberDetails
   private editDialog = false
   private deleteDialog = false
   private addDialog = false
@@ -300,7 +321,7 @@ export default class Member extends Vue {
       url += `/${this.name}`
     }
     try {
-      const response = await this.$axios.get(url)
+      const response = await this.$axios.get<GetMemberInfo>(url)
       console.log(response)
       this.$set(this,'data',response.data.data)
     }catch (e) {
